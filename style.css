@@ -1,0 +1,74 @@
+body{
+    background-color: aqua;
+    font-family: Arial, Helvetica, sans-serif;
+   }
+   .medium{
+       background-color: #00BBF9;
+       border: 1px solid #00BBF9 ;
+       padding: 2em;
+       margin: 2em;
+       width: 299.448px;
+       height:351.689px;
+       /* height:403.689px; */
+       left: -36.336px;
+       top: -210.040px;
+       border-radius: 0px;
+   }
+   
+   .large{
+       background-color: #FEE440;
+       border: 1px solid #FEE440;
+       padding: 2em;
+       margin: 2em;
+       width: 299.448px;
+       height:351.689px;
+       left: -36.336px;
+       top: -210.040px;
+       border-radius: 0px;
+   }
+   
+   .small{
+       background-color: #F15BB5;
+       border: 1px solid #F15BB5;
+       padding: 2em;
+       margin: 2em;
+       width: 299.448px;
+       height:351.689px;
+       /* height:403.689px; */
+       left: -36.336px;
+       top: -210.040px;
+       border-radius: 0px;
+   }
+   
+   .cartz{
+    background-color: #f5b0b0;
+       border: 1px solid #f5b0b0 ;
+       padding: 2em;
+       margin: 2em;
+       width: 299.448px;
+       border-radius: 0px;
+   }
+   
+   @media (min-width: 900px){
+     
+       .Pizzas {
+           display: flex;
+           /* width: 90%; */
+           /* margin: 5em;  */
+           /* margin-top: 0.5em; */
+       }
+   }   
+   
+   .box{
+    background-color: rgb(223, 14, 223);
+   }
+
+   .checkout {
+    margin-top: 1rem;
+  }
+
+  .message {
+    margin-top: 0.5rem;
+  }
+
+   

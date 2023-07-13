@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza Cart</title>
+
+  <script src="//unpkg.com/alpinejs" defer></script>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <h1 style="text-align: center;">Perfect Pizza</h1>
+
+  <div x-data="cartApp()" x-init="init()">
+    <div class="Pizzas">
+      <!-- Medium Pizza -->
+      <div class="medium" x-ref="medium">
+        <!-- Display pizza details -->
+        <h2>Medium Pizza</h2>
+        <img src="medium pizza.png" alt="">
+        <h3>R70.00</h3>
+        <div>Medium margherita pizza with a maximum of 3 toppings, 2 or fewer meat toppings, and 3 or fewer other
+          toppings.</div>
+        <!-- Add to cart button -->
+        <div style="display: flex; margin-top: 10px;">
+          <button x-on:click="addToCart('medium', 70)">Buy</button>
+        </div>
+      </div>
+      <!-- Large Pizza -->
+      <div class="large" x-ref="large">
+        <!-- Display pizza details -->
+        <h2>Large Pizza</h2>
+        <img src="large pizza.png" alt="" style="height: 150px;">
+        <h3>R100.00</h3>
+        <div>Large margherita pizza with a maximum of 3 toppings, 2 or fewer meat toppings, and 3 or fewer other
+          toppings.</div>
+        <!-- Add to cart button -->
+        <div style="display: flex; margin-top: 10px;">
+          <button x-on:click="addToCart('large', 100)">Buy</button>
+        </div>
+      </div>
+      <!-- Small Pizza -->
+      <div class="small" x-ref="small">
+        <!-- Display pizza details -->
+        <h2>Small Pizza</h2>
+        <img src="small pizza.png" alt="">
+        <h3>R50.00</h3>
+        <div>Small pizza with 3 toppings, 1 meat topping, and 3 or fewer other toppings.</div>
+        <!-- Add to cart button -->
+        <div style="display: flex; margin-top: 10px;">
+          <button x-on:click="addToCart('small', 50)">Buy</button>
+        </div>
+      </div>
+    </div>
+  
+    <div id="cart" class="cartz" x-show="true">
+      <h2>Shopping Cart</h2>
+      <ul>
+        <template x-for="(pizza, index) in cart" :key="index">
+          <li>
+            <!-- Display pizza size and price -->
+            <span x-text="pizza.size"></span> - <span x-text="'R' + pizza.price"></span>
+            <!-- Display pizza quantity if greater than 1 -->
+            <!-- <span x-show="pizza.quantity > 1"> x<span x-text="pizza.quantity"></span></span> -->
+            <!-- Remove button -->
+            <button x-show="pizza.showRemove" x-on:click="removeFromCart(index)">Remove</button>
+          </li>
+        </template>
+      </ul>
+      <h3>Totals:</h3>
+      <!-- Small pizzas -->
+      <p>
+        Small
+        <!-- Decrement button -->
+        <button @click="decrement('small')" class="rounded-full bg-gray-200 px-2">-</button>
+        <!-- Display small pizza total price -->
+        <span x-text="'R' + totals.small"></span>
+        <!-- Increment button -->
+        <button @click="increment('small')" class="rounded-full bg-gray-200 px-2">+</button>
+      </p>
+      <!-- Medium pizzas -->
+      <p>
+        Medium
+        <!-- Decrement button -->
+        <button @click="decrement('medium')" class="rounded-full bg-gray-200 px-2">-</button>
+        <!-- Display medium pizza total price -->
+        <span x-text="'R' + totals.medium"></span>
+        <!-- Increment button -->
+        <button @click="increment('medium')" class="rounded-full bg-gray-200 px-2">+</button>
+      </p>
+      <!-- Large pizzas -->
+      <p>
+        Large
+        <!-- Decrement button -->
+        <button @click="decrement('large')" class="rounded-full bg-gray-200 px-2">-</button>
+        <!-- Display large pizza total price -->
+        <span x-text="'R' + totals.large"></span>
+        <!-- Increment button -->
+        <button @click="increment('large')" class="rounded-full bg-gray-200 px-2">+</button>
+      </p>
+      <!-- Display total cost -->
+      <p>Total cost: <span x-text="'R' + totals.total"></span></p>
+      <!-- Checkout button -->
+      <button x-show="cart.length > 0" x-on:click="checkout" class="rounded-full bg-gray-200 px-2">Check Out</button>
+      <div x-show="showCheckout" class="checkout">
+        <!-- Payment input and submit button -->
+        <input type="number" x-model="paymentAmount" placeholder="Enter payment amount">
+        <button x-on:click="processPayment" class="rounded-full bg-gray-200 px-2">Submit</button>
+        <!-- Payment message -->
+        <p x-text="paymentMessage" x-show="paymentMessage" class="message"></p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Include Alpine.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.3.0/dist/alpine.js" defer></script>
+  <script>
+    // Define the cartApp function
+    function cartApp() {
+      // Function to update the totals
+      function updateTotals() {
+        // Initialize a newTotals object
+        const newTotals = {
+          small: 0,
+          medium: 0,
+          large: 0,
+          total: 0
+        };
+  
+        // Calculate the totals based on the cart items
+        this.cart.forEach((pizza) => {
+          const subtotal = pizza.price * pizza.quantity;
+          newTotals[pizza.size] += subtotal;
+          newTotals.total += subtotal;
+        });
+  
+        // Update the totals property
+        this.totals = newTotals;
+      }
+  
+      // Function to decrement the quantity of a pizza size
+      function decrement(size) {
+        const pizza = this.cart.find((p) => p.size === size);
+        if (pizza && pizza.quantity > 0) {
+          pizza.quantity--;
+          updateTotals.call(this);
+        }
+      }
+  
+      // Function to increment the quantity of a pizza size
+      function increment(size) {
+        const pizza = this.cart.find((p) => p.size === size);
+        if (pizza) {
+          pizza.quantity++;
+          updateTotals.call(this);
+        }
+      }
+  
+      // Function to remove a pizza from the cart
+      function removeFromCart(index) {
+        const pizza = this.cart[index];
+        pizza.quantity--;
+  
+        if (pizza.quantity === 0) {
+          this.cart.splice(index, 1);
+        }
+  
+        updateTotals.call(this);
+      }
+  
+      // Return the cartApp object
+      return {
+        cart: [
+          { size: 'small', price: 0, quantity: 0, showRemove: true },
+          { size: 'medium', price: 0, quantity: 0, showRemove: true },
+          { size: 'large', price: 0, quantity: 0, showRemove: true }
+        ], // Array to store the cart items
+        totals: {
+          small: 0,
+          medium: 0,
+          large: 0,
+          total: 0
+        }, // Object to store the totals
+        init() {
+          // Initialize properties for checkout
+          this.showCheckout = false;
+          this.paymentAmount = 0;
+          this.paymentMessage = "";
+        },
+        addToCart(size, price) {
+          // Check if the pizza size already exists in the cart
+          const duplicatePizzaIndex = this.cart.findIndex((pizza) => pizza.size === size);
+          if (duplicatePizzaIndex !== -1) {
+            // If exists, remove the duplicate
+            this.cart.splice(duplicatePizzaIndex, 1);
+          }
+  
+          // Create a new pizza object and add it to the cart
+          const pizza = {
+            size,
+            price,
+            quantity: 1,
+            showRemove: true
+          };
+          this.cart.push(pizza);
+  
+          updateTotals.call(this);
+        },
+        decrement,
+        increment,
+        removeFromCart,
+        showCheckout: false,
+        paymentAmount: 0,
+        paymentMessage: "",
+        checkout() {
+          // Show the checkout section
+          this.showCheckout = true;
+        },
+        processPayment() {
+          if (this.paymentAmount >= this.totals.total) {
+            this.paymentMessage = "Bon appétit, pizza lover!";
+            // Clear the cart and totals
+            // this.cart = [];
+            this.totals = {
+              small: 0,
+              medium: 0,
+              large: 0,
+              total: 0
+            };
+          } else {
+            this.paymentMessage = "Oops! Payment insufficient for this order!";
+          }
+          // Clear the payment message after 5 seconds
+          setTimeout(() => {
+            this.paymentMessage = "";
+          }, 5000);
+        }
+      };
+    }
+  </script>
+  
+
+  <footer class="box">
+    <div>Contact us at: 011-909-2233<br>
+      <div align="end">Pizza Place</div>facebook: pizzaplace<br>
+      <div align="end">Roodekop ext31</div>instagram: @perfectpizza<br>
+      <div align="end">Germiston</div>
+    </div>
+  </footer>
+</body>
+
+</html>
