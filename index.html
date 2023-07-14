@@ -17,6 +17,68 @@
   <h1 style="text-align: center;">Perfect Pizza</h1>
 
   <div x-data="cartApp()" x-init="init()">
+
+    <div id="cart" class="cartz" x-show="true">
+      <h2>Shopping Cart</h2>
+      <ul>
+        <template x-for="(pizza, index) in cart" :key="index">
+          <li>
+            <!-- Display pizza size and price -->
+            <span x-text="pizza.size"></span> - <span x-text="'R' + pizza.price.toFixed(2)"></span>
+            <!-- Display pizza quantity if greater than 1 -->
+            <!-- <span x-show="pizza.quantity > 1"> x<span x-text="pizza.quantity"></span></span> -->
+            <!-- Remove button -->
+            <button x-show="pizza.showRemove" x-on:click="removeFromCart(index)">Remove</button>
+          </li>
+        </template>
+      </ul>
+      <div class="total-totals">
+        <h3>Totals:</h3>
+        <!-- Small pizzas -->
+        <p>
+          Small
+          <!-- Decrement button -->
+          <button @click="decrement('small')" class="rounded-full bg-gray-200 px-2">-</button>
+          <!-- Display small pizza total price -->
+          <span x-text="'R' + totals.small.toFixed(2)"></span>
+          <!-- Increment button -->
+          <button @click="increment('small')" class="rounded-full bg-gray-200 px-2">+</button>
+        </p>
+        <!-- Medium pizzas -->
+        <p>
+          Medium
+          <!-- Decrement button -->
+          <button @click="decrement('medium')" class="rounded-full bg-gray-200 px-2">-</button>
+          <!-- Display medium pizza total price -->
+          <span x-text="'R' + totals.medium.toFixed(2)"></span>
+          <!-- Increment button -->
+          <button @click="increment('medium')" class="rounded-full bg-gray-200 px-2">+</button>
+        </p>
+        <!-- Large pizzas -->
+        <p>
+          Large
+          <!-- Decrement button -->
+          <button @click="decrement('large')" class="rounded-full bg-gray-200 px-2">-</button>
+          <!-- Display large pizza total price -->
+          <span x-text="'R' + totals.large.toFixed(2)"></span>
+          <!-- Increment button -->
+          <button @click="increment('large')" class="rounded-full bg-gray-200 px-2">+</button>
+        </p>
+        <!-- Display total cost -->
+        <p>Total cost: <span x-text="'R' + totals.total.toFixed(2)"></span></p>
+        <!-- Checkout button -->
+        <button x-show="cart.length > 0" x-on:click="checkout" class="rounded-full bg-gray-200 px-2">Check Out</button>
+        <div x-show="showCheckout" class="checkout">
+          <!-- Payment input and submit button -->
+          <!-- <input type="number" x-model="paymentAmount" placeholder="Enter payment amount"> -->
+          <input type="number" placeholder="Enter payment amount">
+          <button x-on:click="processPayment" class="rounded-full bg-gray-200 px-2">Submit</button>
+          <!-- Payment message -->
+          <p x-text="paymentMessage" x-show="paymentMessage" class="message"></p>
+        </div>
+      </div>
+    </div>
+  
     <div class="Pizzas">
       <!-- Medium Pizza -->
       <div class="medium" x-ref="medium">
@@ -55,64 +117,6 @@
         <div style="display: flex; margin-top: 10px;">
           <button x-on:click="addToCart('small', 50)">Buy</button>
         </div>
-      </div>
-    </div>
-  
-    <div id="cart" class="cartz" x-show="true">
-      <h2>Shopping Cart</h2>
-      <ul>
-        <template x-for="(pizza, index) in cart" :key="index">
-          <li>
-            <!-- Display pizza size and price -->
-            <span x-text="pizza.size"></span> - <span x-text="'R' + pizza.price"></span>
-            <!-- Display pizza quantity if greater than 1 -->
-            <!-- <span x-show="pizza.quantity > 1"> x<span x-text="pizza.quantity"></span></span> -->
-            <!-- Remove button -->
-            <button x-show="pizza.showRemove" x-on:click="removeFromCart(index)">Remove</button>
-          </li>
-        </template>
-      </ul>
-      <h3>Totals:</h3>
-      <!-- Small pizzas -->
-      <p>
-        Small
-        <!-- Decrement button -->
-        <button @click="decrement('small')" class="rounded-full bg-gray-200 px-2">-</button>
-        <!-- Display small pizza total price -->
-        <span x-text="'R' + totals.small"></span>
-        <!-- Increment button -->
-        <button @click="increment('small')" class="rounded-full bg-gray-200 px-2">+</button>
-      </p>
-      <!-- Medium pizzas -->
-      <p>
-        Medium
-        <!-- Decrement button -->
-        <button @click="decrement('medium')" class="rounded-full bg-gray-200 px-2">-</button>
-        <!-- Display medium pizza total price -->
-        <span x-text="'R' + totals.medium"></span>
-        <!-- Increment button -->
-        <button @click="increment('medium')" class="rounded-full bg-gray-200 px-2">+</button>
-      </p>
-      <!-- Large pizzas -->
-      <p>
-        Large
-        <!-- Decrement button -->
-        <button @click="decrement('large')" class="rounded-full bg-gray-200 px-2">-</button>
-        <!-- Display large pizza total price -->
-        <span x-text="'R' + totals.large"></span>
-        <!-- Increment button -->
-        <button @click="increment('large')" class="rounded-full bg-gray-200 px-2">+</button>
-      </p>
-      <!-- Display total cost -->
-      <p>Total cost: <span x-text="'R' + totals.total"></span></p>
-      <!-- Checkout button -->
-      <button x-show="cart.length > 0" x-on:click="checkout" class="rounded-full bg-gray-200 px-2">Check Out</button>
-      <div x-show="showCheckout" class="checkout">
-        <!-- Payment input and submit button -->
-        <input type="number" x-model="paymentAmount" placeholder="Enter payment amount">
-        <button x-on:click="processPayment" class="rounded-full bg-gray-200 px-2">Submit</button>
-        <!-- Payment message -->
-        <p x-text="paymentMessage" x-show="paymentMessage" class="message"></p>
       </div>
     </div>
   </div>
@@ -222,27 +226,34 @@
           this.showCheckout = true;
         },
         processPayment() {
-          if (this.paymentAmount >= this.totals.total) {
-            this.paymentMessage = "Bon appétit, pizza lover!";
-            // Clear the cart and totals
-            // this.cart = [];
-            this.totals = {
-              small: 0,
-              medium: 0,
-              large: 0,
-              total: 0
-            };
-          } else {
-            this.paymentMessage = "Oops! Payment insufficient for this order!";
-          }
-          // Clear the payment message after 5 seconds
-          setTimeout(() => {
-            this.paymentMessage = "";
-          }, 5000);
-        }
+  const paymentInput = document.querySelector('input[type="number"]');
+  const paymentAmount = parseFloat(paymentInput.value);
+
+  if (paymentAmount >= this.totals.total) {
+    const change = paymentAmount - this.totals.total;
+    this.paymentMessage = "Bon appétit, pizza lover! Change: R" + change.toFixed(2);
+    // Clear the cart and totals
+    // this.cart = [];
+    this.totals = {
+      small: 0,
+      medium: 0,
+      large: 0,
+      total: 0
+    };
+  } else {
+    this.paymentMessage = "Oops! Payment insufficient for this order!";
+  }
+  // Clear the payment message after 5 seconds
+  setTimeout(() => {
+    this.paymentMessage = "";
+  }, 5000);
+}
+
       };
     }
   </script>
+  
+  
   
 
   <footer class="box">

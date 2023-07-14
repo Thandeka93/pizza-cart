@@ -5,7 +5,7 @@ body{
    .medium{
        background-color: #00BBF9;
        border: 1px solid #00BBF9 ;
-       padding: 2em;
+       padding: 3em;
        margin: 2em;
        width: 299.448px;
        height:351.689px;
@@ -18,7 +18,7 @@ body{
    .large{
        background-color: #FEE440;
        border: 1px solid #FEE440;
-       padding: 2em;
+       padding: 3em;
        margin: 2em;
        width: 299.448px;
        height:351.689px;
@@ -30,7 +30,7 @@ body{
    .small{
        background-color: #F15BB5;
        border: 1px solid #F15BB5;
-       padding: 2em;
+       padding: 3em;
        margin: 2em;
        width: 299.448px;
        height:351.689px;
@@ -43,16 +43,30 @@ body{
    .cartz{
     background-color: #f5b0b0;
        border: 1px solid #f5b0b0 ;
-       padding: 2em;
-       margin: 2em;
+       padding: 2.5em;
+       /* margin: 2em; */
+       /* width: 299.448px; */
+       /* height: 400px; */
        width: 299.448px;
+       height:351.689px;
        border-radius: 0px;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+       text-align: center;
+       margin: 0 auto;
+       
+   }
+   .total-totals{
+       flex-direction: column;
    }
    
    @media (min-width: 900px){
      
        .Pizzas {
            display: flex;
+           
            /* width: 90%; */
            /* margin: 5em;  */
            /* margin-top: 0.5em; */
