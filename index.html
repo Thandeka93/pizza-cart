@@ -225,6 +225,7 @@
           // Show the checkout section
           this.showCheckout = true;
         },
+
         processPayment() {
   const paymentInput = document.querySelector('input[type="number"]');
   const paymentAmount = parseFloat(paymentInput.value);
@@ -240,6 +241,7 @@
       large: 0,
       total: 0
     };
+    
   } else {
     this.paymentMessage = "Oops! Payment insufficient for this order!";
   }
