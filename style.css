@@ -1,5 +1,5 @@
 body{
-    background-color: aqua;
+    background-color: #BF4F51;
     font-family: Arial, Helvetica, sans-serif;
    }
    .medium{
@@ -74,7 +74,7 @@ body{
    }   
    
    .box{
-    background-color: rgb(223, 14, 223);
+    background-color: #FDBCB4;
    }
 
    .checkout {
@@ -84,5 +84,37 @@ body{
   .message {
     margin-top: 0.5rem;
   }
+
+  .table{
+    background-color: #f1a1a1;
+    border-radius: 0.5em;
+    margin-top: 2em;
+}
+.messege{
+    color: rgb(129, 255, 154);
+    background-color: black;
+}
+table{
+    border-collapse: collapse;
+    width: 80%;
+    margin: auto;
+}
+td{
+    text-align: center;
+    vertical-align: bottom;
+}
+th, td{
+    text-align: center;
+    border: 1px solid black;
+    padding: 15px;
+}
+.intro{
+    background-color:#FDBCB4;
+    /* border-radius: 0.5em; */
+    font-size: large;
+    font-weight: bold;
+    padding: 1em;
+    margin-bottom: 2em;
+}
 
    
