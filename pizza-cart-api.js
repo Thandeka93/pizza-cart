@@ -2,6 +2,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('pizzaCartWithAPIWidget', function () {
       return {
         pizzas: [],
+        username:'',
         init() {
           axios
             .get('https://pizza-api.projectcodex.net/api/pizzas')
@@ -59,7 +60,7 @@ document.addEventListener('alpine:init', () => {
   
   
         message: 'Welcome to Perfect Pizza',
-        username: '',
+        // username: '',
   
         featuredpizzas: [],
         cartId: '',
